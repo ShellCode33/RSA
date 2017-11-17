@@ -197,7 +197,7 @@ class RSA {
             BigInteger cipher = message_integer.modPow(public_key, mod); //On chiffre le bloc
             byte[] cipher_bytes = cipher.toByteArray();
 
-            byte[] block = new byte[mKeySize / 8 + 1]; //Parfois le BigInteger chiffré fait, pour une raison totalement inconnue, 1 octet de plus que le modulo. Du coup on fait +1 afin de prévoir ce cas particulier
+            byte[] block = new byte[mKeySize / 8 + 1]; //Parfois toByteArray() ajoute un bit de signe (et donc un octet) il faut donc faire +1 car l'array peut faire 1 octet de plus que la taille du modulo
 
             int block_index = block.length - 1;
             for (int j = cipher_bytes.length - 1; j >= 0; j--)
@@ -222,7 +222,7 @@ class RSA {
             //System.out.println("cipher_bytes : " + Arrays.toString(cipher_bytes));
 
             //System.out.println("Cipher size : " + cipher_bytes.length + "+1");
-            byte[] block = new byte[mKeySize / 8 + 1]; //Parfois le BigInteger chiffré fait, pour une raison totalement inconnue, 1 octet de plus que le modulo. Du coup on fait +1 afin de prévoir ce cas particulier
+            byte[] block = new byte[mKeySize / 8 + 1]; //Parfois toByteArray() ajoute un bit de signe (et donc un octet) il faut donc faire +1 car l'array peut faire 1 octet de plus que la taille du modulo
 
             int block_index = block.length - 1;
             for (int j = cipher_bytes.length - 1; j >= 0; j--)
@@ -278,7 +278,7 @@ class RSA {
         int index = 0;
         for (int i = 0; i < nb_blocks; i++) {
 
-            byte[] cipher_bytes = Arrays.copyOfRange(cipher, i * (mKeySize / 8 + 1), (i + 1) * (mKeySize / 8 + 1));//Le fameux +1 pour résoudre le bug étrange
+            byte[] cipher_bytes = Arrays.copyOfRange(cipher, i * (mKeySize / 8 + 1), (i + 1) * (mKeySize / 8 + 1));//Le fameux +1 pour le bit de signe
 
             //System.out.println("[DECRYPT] Block size : " + cipher_bytes.length);
 

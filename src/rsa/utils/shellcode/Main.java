@@ -16,7 +16,7 @@ public class Main {
         String cipher_b64 = rsa.encode(msg, rsa.getPublicKey(), rsa.getMod());
         System.out.println("cipher : " + cipher_b64);
         String decrypted_msg = rsa.decodeToString(cipher_b64, rsa.getPrivateKey(), rsa.getMod());
-        System.out.println("plaintext : " + decrypted_msg);
+        System.out.println("decrypted : " + decrypted_msg);
 
         if(msg.equals(decrypted_msg)) {
             System.out.println("RSA is working !!");
