@@ -170,8 +170,8 @@ class RSA {
         int block_size = mKeySize / 2 - 1; //p et q sont sur mKeySize/2 bits, donc on prend la valeur juste en dessous --->  -1
 
         //Mais il faut que la taille du bloc soit divisible par 8 afin de pouvoir passer de bits à octets (et inversement) sans problème.
-        while(block_size_bits % 8 != 0)
-            block_size_bits--;
+        while(block_size % 8 != 0)
+            block_size--;
 
         //System.out.println("Un bloc doit faire " + block_size + " bits");
         //System.out.println("Le message fait " + msg_bytes.length + " octets, donc " + msg_bytes.length*8 + " bits");
