@@ -167,7 +167,7 @@ class RSA {
         //On définit la taille d'un block en fonction de la taille de p et de q.
         //Le message M doit être premier avec le modulo N. Pour s'en assurer, on fait en sorte que le message soit plus petit que p et q,
         // de cette manière, on est sûrs que M et N seront premiers entre eux (vu que N = p * q avec p et q premiers)
-        int block_size = (int)(mKeySize / 2 - 1); //p et q sont sur mKeySize/2 bits, donc on prend la valeur juste en dessous --->  -1
+        int block_size = mKeySize / 2 - 1; //p et q sont sur mKeySize/2 bits, donc on prend la valeur juste en dessous --->  -1
 
         //Mais il faut que la taille du bloc soit divisible par 8 afin de pouvoir convertir en octet
         while((block_size % 8 != 0)
