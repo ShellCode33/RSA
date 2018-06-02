@@ -50,10 +50,10 @@ class RSA {
         BigInteger e;
 
         do {
-            e = new BigInteger(mKeySize - 1, random);   //On génère une exposant aléatoire
+            e = new BigInteger(mKeySize - 1, random);   //On génère un exposant aléatoire
         } while (!e.gcd(phi_n).equals(BigInteger.ONE)); //Tant que le nombre n'est pas premier avec phi_n, on en génère un nouveau
 
-        BigInteger d = e.modInverse(phi_n); //Notre clé privée est le coupe (e^-1[phi_n], mMOd)
+        BigInteger d = e.modInverse(phi_n); //Notre clé privée est le couple (e^-1[phi_n], mMOd)
 /*
         System.out.println("p = " + p.toString() + "\n");
         System.out.println("q = " + q.toString() + "\n");
@@ -167,18 +167,18 @@ class RSA {
         //On définit la taille d'un block en fonction de la taille de p et de q.
         //Le message M doit être premier avec le modulo N. Pour s'en assurer, on fait en sorte que le message soit plus petit que p et q,
         // de cette manière, on est sûrs que M et N seront premiers entre eux (vu que N = p * q avec p et q premiers)
-        float block_size_bits = (float)mKeySize / 2 - 1; //p et q sont sur mKeySize/2 bits, donc on prend la valeur juste en dessous --->  -1
+        int block_size = (int)(mKeySize / 2 - 1); //p et q sont sur mKeySize/2 bits, donc on prend la valeur juste en dessous --->  -1
 
-        //Mais il faut que la taille du bloc soit divisible par 8 afin de pouvoir passer de bits à octets (et inversement) sans problème.
-        while((block_size_bits / 8) % 1 != 0)
-            block_size_bits--;
+        //Mais il faut que la taille du bloc soit divisible par 8 afin de pouvoir convertir en octet
+        while((block_size % 8 != 0)
+            block_size--;
 
-        int block_size = (int)block_size_bits;
+        block_size /= 8;
 
         //System.out.println("Un bloc doit faire " + block_size + " bits");
         //System.out.println("Le message fait " + msg_bytes.length + " octets, donc " + msg_bytes.length*8 + " bits");
 
-        int nb_sub_messages = (int) Math.ceil((float)msg_bytes.length / (block_size / 8));
+        int nb_sub_messages = (int) Math.ceil((float)msg_bytes.length / block_size);
         //System.out.println("Il y aura " + nb_sub_messages + " blocs");
 
         byte[][] blocks = new byte[nb_sub_messages][];
@@ -188,7 +188,7 @@ class RSA {
         for (; i < nb_sub_messages - 1; i++) { //On chiffre chaque block
             //System.out.println("Bloc n°" + (i+1));
 
-            byte[] msg_block = Arrays.copyOfRange(msg_bytes, i * block_size / 8, (i + 1) * block_size / 8);
+            byte[] msg_block = Arrays.copyOfRange(msg_bytes, i * block_size, (i + 1) * block_size);
             //System.out.println("Encode : " + new String(msg_block));
             //System.out.println("msg_block size : " + msg_block.length);
             copied_bytes += msg_block.length;
